@@ -5,4 +5,8 @@
 
 3. Enabled the POST route to receive JSON data with app.use(express.json()).
 
-6. Added more details to the response since most of the information will be null if the github user does not have a completed profile.
+4. Extracted github API call into an async function and handled it in the route using some of the existing code.
+
+5. Added more details to the response since most of the information will be null if the github user does not have a completed profile.
+
+6. Refactored code

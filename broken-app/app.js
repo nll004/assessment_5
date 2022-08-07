@@ -3,9 +3,8 @@ const axios = require('axios');
 const app = express();
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-async function getInfo(arrayOfDevUsernames){
+async function getGithubUserInfo(arrayOfDevUsernames){
   try{
     return await axios.all(arrayOfDevUsernames.map((dev) => axios.get(`https://api.github.com/users/${dev}`)))
   } catch (err){
@@ -14,9 +13,10 @@ async function getInfo(arrayOfDevUsernames){
 }
 
 app.post('/', (req, resp, next) => {
-    getInfo(req.body.developers).then(results =>{
+  let devUsernames = req.body.developers
+    getGithubUserInfo(devUsernames).then(results =>{
       let out = results.map(r => ({ user : r.data.login, name: r.data.name, bio: r.data.bio, link: r.data.html_url }));
-      return resp.send(JSON.stringify(out));
+        return resp.send(JSON.stringify(out));
     })
 });
 
