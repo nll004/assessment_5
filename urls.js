@@ -10,7 +10,6 @@ function getDomainName(url){
     }
     catch (err){
         console.error(err)
-        return
     }
     return domain
 }
@@ -18,16 +17,17 @@ function getDomainName(url){
 function writeHtmlToFile(fileName, content){
     fs.writeFile(`${fileName}.txt`, content, err => {
         if (err) {
-            console.log(`${fileName} was not written to file`)
-            console.error(err);
+            console.log(`${fileName}.txt failed to be written due to ${err}`)
         }
         console.log(`Wrote to ${fileName}`)
     });
 }
 
 function getUrlContentAndWriteToFile(arrayOfUrls){
+    // Potential errors?- empty array, url is invalid, request failed?, getdomain failed, writefile failed
     arrayOfUrls.forEach(url => axios.get(url)
-        .then(resp => writeHtmlToFile(getDomainName(url), resp.data)))
+    .then(resp => writeHtmlToFile(getDomainName(url), resp.data))
+    .catch(err => console.log(`Could not get data from ${url} due to ${err}`)))
 }
 
 function extractUrlsFromTextFile(file){
@@ -51,5 +51,5 @@ try{
     getUrlContentAndWriteToFile(urlArray)
 }
 catch (err) {
-    console.log(`Please enter a valid file. ${err}`)
+    console.log(`${err}`)
 }
